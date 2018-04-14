@@ -206,10 +206,11 @@ sudo ./startup.sh
 sudo ./shutdown.sh
 </code></pre>
 
-<pre><code>###添加自动启动　　无效？
+<pre><code>###添加自动启动　　
 vim /etc/rc.d/rc.local
 
-./usr/local/tomcat/bin/startup.sh
+export JAVA_HOME=/usr/local/jdk1.8.0_161　###必须加
+/usr/local/tomcat/bin/startup.sh start
 </code></pre>
 
 <h4 id="2-jenkins-https-jenkins-io-download-到官网下载安装包-这里选择-generate-java-package-war-进行安装">2. <a href="https://jenkins.io/download/">Jenkins</a>,到官网下载安装包，这里选择<code>Generate Java package(.war)</code>进行安装。</h4>
@@ -477,6 +478,29 @@ mv jenkins.war  /usr/local/tomcat/webapps/
 </nav>
 
 	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "meetpasser-cc" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
 </main>
 
 <aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
