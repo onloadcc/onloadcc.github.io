@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使用Jenkins布署Android打包平台</title>
+<meta name="description" content=" Passer&#39;s Personal blog about everything">
+<meta name="generator" content="Hugo 0.32.4" />
+<meta property="og:title" content="使用Jenkins布署Android打包平台" />
+<meta property="og:description" content="使用Jenkins布署Android打包平台，并上传到七牛云" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.meetpasser.cc/post/2018/2018-04_deployingandroidappwithjenkins/" />
+
+
+
+<meta property="article:published_time" content="2018-04-13T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-04-13T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" type="text/css" media="all" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/js/scripts.js"></script>
+<link rel="shortcut icon" href="/favicon.ico">
+
+</head>
+<body class="body body-right-sidebar mobile" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div class="container container-outer">
+		<header class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<div class="container container-inner clearfix">
+				<div class="logo" role="banner" itemscope="itemscope" itemtype="http://schema.org/Brand">
+					<a class="logo__link" href="/" title="Meet Stranger" rel="home">
+						<h1 class="logo__title">Meet Stranger</h1>
+						<h2 class="logo__tagline">record something</h2>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/">MAIN</a></li>
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main-content content" role="main" itemprop="mainContentOfPage">
+	<article class="post">
+		<header class="post__header clearfix">
+			<h1 class="post__title">使用Jenkins布署Android打包平台</h1>
+			<p class="post__meta meta">
+				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+				<time class="post__meta-date" datetime="2018-04-13T00:00:00">April 13, 2018</time>
+				<span class="post__meta-categories meta-categories">
+					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+					<a class="meta-categories__link" href="/categories/android" rel="category">Android</a>, <a class="meta-categories__link" href="/categories/tools" rel="category">Tools</a></span>
+			</p>
+		</header>
+		<div class="post__content clearfix">
+			<p>渠道加的起来越多了，手动打包再上传真是够了。用下Jenkins来进行集成打包。来定个目标：自动进行构建，完成后上传到七牛云上，获取到下载链接。</p>
+
+<p></p>
+
+<h3 id="环境检查下">环境检查下</h3>
+
+<pre><code>### 操作系统版本
+cat /etc/redhat-release　　
+CentOS Linux release 7.2.1511 (Core)
+
+### 查看系统内核
+uname -a
+
+### 查看磁盘信息
+df -h
+
+### 查看指定目录大小
+du -sh &lt;目录名&gt;
+
+### cpu信息
+cat /proc/cpuinfo
+
+### 内存信息
+cat /proc/meminfo
+
+</code></pre>
+
+<h3 id="一-基础sdk安装">一  基础SDK安装</h3>
+
+<h5 id="1-jdk安装">1.JDK安装</h5>
+
+<p>系统自带的jdk功能少，例如<code>javac</code>命令就没有，删除后重新安装。</p>
+
+<pre><code>### 删除JDK
+rpm -qa | grep jdk
+rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.151-5.b12.el7_4.x86_64
+
+### 下载新的
+wget --no-cookie --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz
+tar zxvf jdk-8u161-linux-x64.tar.gz
+mv jdk1.8.0_161 /usr/local/jdk1.8.0_161
+
+
+### 添加`JAVA_HOME`环境变量
+vim ~/.bash_profile
+
+JAVA_HOME=/usr/local/jdk1.8.0_161
+export JAVA_HOME
+export PATH=$JAVA_HOME/bin:$PATH
+CLASSPATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+export PATH=$CLASSPATH:$JAVA_HOME/jre/bin
+
+source ~/.bash_profile 
+
+### test
+java -version
+</code></pre>
+
+<h5 id="2-gradle安装">2.Gradle安装</h5>
+
+<p>Gradle和AndroidSDK都说用自己电脑的，就不用下载啦，直接拷贝使用。注意拷贝项目使用的Gradle版本。又拷贝了一次和下面的截图不一致。</p>
+
+<pre><code>## copy file
+scp gradle-4.1-all.zip root@192.168.0.106:/home
+
+## unzip 
+unzip gradle-4.1-all.zip
+
+## 添加环境变量
+vim ~/.bash_profile
+
+GRADLE_HOME=/usr/local/gradle-4.1
+export GRADLE_HOME
+export PATH=$GRADLE_HOME/bin:$PATH
+
+source ~/.bash_profile 
+
+## test
+gradle -v
+</code></pre>
+
+<h4 id="3-androidsdk配置">3.AndroidSDK配置</h4>
+
+<p>到官网下载Linux版本的SDK。</p>
+
+<pre><code>###Linux版本SDK下载
+wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+
+unzip sdk-tools-linux-3859397.zip
+
+mv ~/tools /usr/local/ANDROID/sdk
+
+###环境变量添加
+vim ~/.bash_profile
+
+ANDROID_HOME=/usr/local/ANDROID/sdk
+export ANDROID_HOME
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$PATH
+
+source ~/.bash_profile
+</code></pre>
+
+<pre><code>###显示SDK列表
+sdkmanager --list
+
+###安装需要的工具
+sdkmanager &quot;ndk-bundle&quot;
+sdkmanager &quot;build-tools;25.0.3&quot;
+sdkmanager &quot;platforms;android-25&quot;
+</code></pre>
+
+<blockquote>
+<p>注意直接在<code>tools</code>目录下运行<code>android</code>是无法运行的，必须使用全路径或者把<code>tools</code>加到环境变量中才能使用。</p>
+</blockquote>
+
+<h4 id="4-git安装">4.Git安装</h4>
+
+<p><a href="https://git-scm.com/book/zh/v1/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git">起步 - 安装 Git</a></p>
+
+<h3 id="二-环境搭建">二  环境搭建</h3>
+
+<h4 id="1-服务器-tomcat-https-tomcat-apache-org-download-80-cgi-安装-下载对应平台的安装包-直接拷贝到自定义目录即可">1.服务器<a href="https://tomcat.apache.org/download-80.cgi">Tomcat</a>安装。下载对应平台的安装包，直接拷贝到自定义目录即可。</h4>
+
+<pre><code>###本地有就直接拷了
+scp /Users/hello/Downloads/apache-tomcat-8.5.30.tar.gz  root@192.168.0.106:/home
+</code></pre>
+
+<pre><code>###启动
+sudo ./startup.sh
+###关闭　
+sudo ./shutdown.sh
+</code></pre>
+
+<pre><code>###添加自动启动　　无效？
+vim /etc/rc.d/rc.local
+
+./usr/local/tomcat/bin/startup.sh
+</code></pre>
+
+<h4 id="2-jenkins-https-jenkins-io-download-到官网下载安装包-这里选择-generate-java-package-war-进行安装">2. <a href="https://jenkins.io/download/">Jenkins</a>,到官网下载安装包，这里选择<code>Generate Java package(.war)</code>进行安装。</h4>
+
+<p>下载后直接把<code>jenkins.war</code>文件拷贝到Tomcat的<code>webapps</code>目录下。</p>
+
+<pre><code>wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+mv jenkins.war  /usr/local/tomcat/webapps/
+</code></pre>
+
+<p>启动Tomcat服务器，访问<code>http://localhost:8080</code>进行安装配置。</p>
+
+<h6 id="1-输入密码">1. 输入密码</h6>
+
+<p>
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_1.png" alt="input password" width="600px" height="400px" />
+    
+    
+</figure>
+
+<p></p></p>
+
+<h6 id="2-安装插件-使用默认安装即可">2. 安装插件，使用默认安装即可</h6>
+
+<p>
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_2.png" alt="install plugins" width="600px" height="400px" />
+    
+    
+</figure>
+
+<p></p></p>
+
+<h6 id="3-添加帐户">3. 添加帐户</h6>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_3.png" alt="add accounts" width="600px" height="400px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h6 id="4-配置环境变量">4. 配置环境变量</h6>
+
+<p>系统设置中添加<code>ANDROID_HOME</code></p>
+
+<p>
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_4_ANDROID_HOME.png" alt="setting android home" width="600px" height="200px" />
+    
+    
+</figure>
+
+<p></p></p>
+
+<p>全局工具配置配置<code>JDK</code>和<code>Gradle</code>目录</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_4_JDK.png" alt="setting jdk" width="600px" height="200px" />
+    
+    
+</figure>
+
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_setting_4_Gradle.png" alt="setting gradle" width="600px" height="200px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h3 id="三-创建任务">三　创建任务　</h3>
+
+<h5 id="1-创建任务">1.创建任务</h5>
+
+<p>开始创建一个任务，填写名称，选择构建一个自由风格的软件项目。</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_1.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h5 id="2-源码管理添加">2.源码管理添加</h5>
+
+<p>从什么地方获取代码，可使用Git或SVN。</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_2_1.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_2_2.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h5 id="3-构建触发器">3.构建触发器</h5>
+
+<p>定义什么情况下触发构建或手动进行构建</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_3.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h5 id="4-构建环境">4.构建环境</h5>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_4_1.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<p>在这里使用第三方插件(Env Injector)进行动态注入变量：读取本地的Properties文件，将变量注入到系统变量中，可在后面直接使用</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_4_2.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h5 id="5-构建">5.构建</h5>
+
+<p>根据项目选择合适的构建类型，或者执行命令行都可以。</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_5_1.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_5_2.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h5 id="6-构建后操作">6.构建后操作</h5>
+
+<p>执行构建完成后需要的操作，可在这里发送邮件通知或作其它操作。
+这里指定上传到七牛云上，并获取到完整的下载链接。　　</p>
+
+<p><a href="https://github.com/onloadcc/qiniu-file">Jenkins插件－上传文件到七牛云</a>，详细使用请点击查看。</p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_6_1.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+
+<figure >
+    
+        <img src="/img/jenkins/jenkins_task_6_2.png" alt="task 1" width="600px" height="800px" />
+    
+    
+</figure>
+
+
+<p></p>
+
+<h3 id="参考">参考</h3>
+
+<p><a href="https://juejin.im/entry/585a6b6bb123db006597195a">Android Jenkins+Git+Gradle 持续集成 </a><br />
+<a href="http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins/">使用Jenkins搭建iOS/Android持续集成打包平台</a><br />
+<a href="https://www.ibm.com/developerworks/cn/java/j-lo-jenkins-plugin/">浅析 Jenkins 插件开发</a><br />
+<a href="http://www.cnblogs.com/xindong/p/5364970.html">Jenkins添加构建后shell cmd的应用插件&ndash;PostBuildScript plugin插件</a><br />
+<a href="https://blog.csdn.net/u011541946/article/details/78278494">Jenkins项目实战之-Android基于Gradle参数化打不同环境安装包（二）</a><br />
+<a href="https://blog.csdn.net/u011541946/article/category/7175041">Jenkins项目实战之</a><br />
+<a href="http://www.cnblogs.com/itech/archive/2011/11/18/2254188.html">Jenkins插件之环境变量插件EnvInject</a><br />
+<a href="http://www.cnblogs.com/xiaochengzi/p/8251805.html">Jenkins参数化构建（三）之 Jenkins从文件中读取运行参数&ndash;Extended Choice Parameter</a><br />
+<a href="https://my.oschina.net/donhui/blog/530715">jenkins中的环境变量</a><br />
+<a href="https://testerhome.com/topics/8311">Jenkins Plugin 获取变量的问题。</a><br />
+<a href="https://blog.csdn.net/taishanduba/article/details/61423121">Jenkins学习（四）job界面详解</a></p>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link" href="/tags/android/" rel="tag">Android</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/jenkins/" rel="tag">Jenkins</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/%E4%B8%83%E7%89%9B%E4%BA%91/" rel="tag">七牛云</a></li>
+	</ul>
+</div>
+
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Passer avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Passer</span>
+	</div>
+	<div class="authorbox__description">
+		Empty
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/2018/2018-03_androidpermission/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">Android权限申请</p></a>
+	</div>
+</nav>
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "passerzhang" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</main>
+
+<aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="//google.com/search">
+		<label>
+			<span class="screen-reader-text">Search for:</span>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="http://www.meetpasser.cc" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
+		</ul>
+	</div>
+</div>
+
+	
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
+		</ul>
+	</div>
+</div>
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/shanccc" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget__link widget__link--taglist" href="/tags/android" title="android">android</a>
+		<a class="widget__link widget__link--taglist" href="/tags/aria2c" title="aria2c">aria2c</a>
+		<a class="widget__link widget__link--taglist" href="/tags/awz" title="awz">awz</a>
+		<a class="widget__link widget__link--taglist" href="/tags/blog" title="blog">blog</a>
+		<a class="widget__link widget__link--taglist" href="/tags/download" title="download">download</a>
+		<a class="widget__link widget__link--taglist" href="/tags/git" title="git">git</a>
+		<a class="widget__link widget__link--taglist" href="/tags/github" title="github">github</a>
+		<a class="widget__link widget__link--taglist" href="/tags/go" title="go">go</a>
+		<a class="widget__link widget__link--taglist" href="/tags/hugo" title="hugo">hugo</a>
+		<a class="widget__link widget__link--taglist" href="/tags/jenkins" title="jenkins">jenkins</a>
+		<a class="widget__link widget__link--taglist" href="/tags/permission" title="permission">permission</a>
+		<a class="widget__link widget__link--taglist" href="/tags/proguard" title="proguard">proguard</a>
+		<a class="widget__link widget__link--taglist" href="/tags/shadowsocks" title="shadowsocks">shadowsocks</a>
+		<a class="widget__link widget__link--taglist" href="/tags/tools" title="tools">tools</a>
+		<a class="widget__link widget__link--taglist" href="/tags/%e4%b8%83%e7%89%9b%e4%ba%91" title="七牛云">七牛云</a>
+	</div>
+</div>
+</aside>
+
+	</div>
+		<footer class="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="container container-inner">
+				<p class="footer__copyright">&copy; 2018 Meet Stranger. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad theme</a>.</span></p>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script>
+</body>
+</html>

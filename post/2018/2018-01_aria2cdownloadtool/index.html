@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aria2c下载工具</title>
+<meta name="description" content=" Passer&#39;s Personal blog about everything">
+<meta name="generator" content="Hugo 0.32.4" />
+<meta property="og:title" content="Aria2c下载工具" />
+<meta property="og:description" content="Aria2c是一个支持Http,fpt和magent下载的多平台工具。介绍Aria2c在mac和Windows上使用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.meetpasser.cc/post/2018/2018-01_aria2cdownloadtool/" />
+
+
+
+<meta property="article:published_time" content="2018-01-30T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-01-30T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" type="text/css" media="all" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/js/scripts.js"></script>
+<link rel="shortcut icon" href="/favicon.ico">
+
+</head>
+<body class="body body-right-sidebar mobile" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div class="container container-outer">
+		<header class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<div class="container container-inner clearfix">
+				<div class="logo" role="banner" itemscope="itemscope" itemtype="http://schema.org/Brand">
+					<a class="logo__link" href="/" title="Meet Stranger" rel="home">
+						<h1 class="logo__title">Meet Stranger</h1>
+						<h2 class="logo__tagline">record something</h2>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/">MAIN</a></li>
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main-content content" role="main" itemprop="mainContentOfPage">
+	<article class="post">
+		<header class="post__header clearfix">
+			<h1 class="post__title">Aria2c下载工具</h1>
+			<p class="post__meta meta">
+				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+				<time class="post__meta-date" datetime="2018-01-30T00:00:00">January 30, 2018</time>
+				<span class="post__meta-categories meta-categories">
+					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+					<a class="meta-categories__link" href="/categories/tools" rel="category">Tools</a></span>
+			</p>
+		</header>
+		<div class="post__content clearfix">
+			<p>Aria2c是一个支持Http,fpt和magent下载的多平台工具。<br />
+介绍Aria2c在mac和Windows上使用。</p>
+
+<p><a href="https://aria2.github.io/">https://aria2.github.io/</a></p>
+
+<p></p>
+
+<h3 id="mac使用">Mac使用</h3>
+
+<p><a href="https://github.com/yangshun1029/aria2gui/releases">Aria2GUI</a>直接下载即可使用。
+<a href="https://github.com/persepolisdm/persepolis/releases">Persepolis Download Manager&ndash;全平台界面</a></p>
+
+<h3 id="windows下使用">Windows下使用</h3>
+
+<p>环境：<code>win10, aria2c 1.33.0</code></p>
+
+<p>1.到官网上下载软件后解压至目录，例<code>D:\download\aria2</code></p>
+
+<p>2.在解压的目录创建4个文件。</p>
+
+<pre><code>aria2.conf
+aria2.log
+aria2.session
+HideRun.vbs
+</code></pre>
+
+<p>3.编辑<code>aria2.conf</code>，添加配置内容<br />
+配置文件内容来自mac版<code>Aria2GUI</code>配置文件。</p>
+
+<pre><code>## '#'开头为注释内容, 选项都有相应的注释说明, 根据需要修改 ##
+## 被注释的选项填写的是默认值, 建议在需要修改时再取消注释  ##
+## 添加了@和默认启用的选项都是系统需要调用的，请不要随意改动否则可能无法正常运行
+
+## 文件保存相关 ##
+
+# 文件的保存路径(可使用绝对路径或相对路径), 默认: 当前启动位置
+# 此项 OS X 无法使用 $HOME 及 ~/ 设置路径  建议使用 /users/用户名/downloads
+dir=G:\download\
+# 启用磁盘缓存, 0为禁用缓存, 需1.16以上版本, 默认:16M
+disk-cache=32M
+# 文件预分配方式, 能有效降低磁盘碎片, 默认:prealloc
+# 预分配所需时间: none &lt; falloc ? trunc &lt; prealloc
+# falloc和trunc则需要文件系统和内核支持
+# NTFS建议使用falloc, EXT3/4建议trunc, MAC 下需要注释此项
+file-allocation=falloc
+# 断点续传
+continue=true
+
+## 进度保存相关 ##
+
+log=E:\aria2\aria2.log
+log-level=warn
+# 从会话文件中读取下载任务
+input-file=E:\aria2\aria2.session
+# 在Aria2退出时保存`错误/未完成`的下载任务到会话文件
+save-session=E:\aria2\aria2.session
+# 定时保存会话, 0为退出时才保存, 需1.16.1以上版本, 默认:0
+save-session-interval=30
+
+## 下载连接相关 ##
+
+# 最大同时下载任务数, 运行时可修改, 默认:5. 百度下载windows下测试2合适
+max-concurrent-downloads=2
+# 同一服务器连接数, 添加时可指定, 默认:1
+max-connection-per-server=16
+# 最小文件分片大小, 添加时可指定, 取值范围1M -1024M, 默认:20M
+# 假定size=10M, 文件为20MiB 则使用两个来源下载; 文件为15MiB 则使用一个来源下载
+min-split-size=10M
+# 单个任务最大线程数, 添加时可指定, 默认:5
+split=15
+# 整体下载速度限制, 运行时可修改, 默认:0
+max-overall-download-limit=0
+# 单个任务下载速度限制, 默认:0
+max-download-limit=0
+# 整体上传速度限制, 运行时可修改, 默认:0
+max-overall-upload-limit=0
+# 单个任务上传速度限制, 默认:0
+max-upload-limit=0
+# 禁用IPv6, 默认:false
+disable-ipv6=false
+#运行覆盖已存在文件
+allow-overwrite=true
+#自动重命名
+auto-file-renaming=true
+
+
+
+## RPC相关设置 ##
+
+# 启用RPC, 默认:false
+enable-rpc=true
+# 允许所有来源, 默认:false
+rpc-allow-origin-all=true
+# 允许非外部访问, 默认:false
+rpc-listen-all=true
+# 事件轮询方式, 取值:[epoll, kqueue, port, poll, select], 不同系统默认值不同
+#event-poll=select
+# RPC监听端口, 端口被占用时可以修改, 默认:6800
+# 使用本客户端请勿修改此项
+#rpc-listen-port=6800
+# 设置的RPC授权令牌, v1.18.4新增功能, 取代 --rpc-user 和 --rpc-passwd 选项
+#rpc-secret=token
+
+
+## BT/PT下载相关 ##
+
+# 当下载的是一个种子(以.torrent结尾)时, 自动开始BT任务, 默认:true
+#follow-torrent=true
+# BT监听端口, 当端口被屏蔽时使用, 默认:6881-6999
+listen-port=51413
+# 单个种子最大连接数, 默认:55
+#bt-max-peers=55
+# 打开DHT功能, PT需要禁用, 默认:true
+enable-dht=false
+# 打开IPv6 DHT功能, PT需要禁用
+#enable-dht6=false
+# DHT网络监听端口, 默认:6881-6999
+#dht-listen-port=6881-6999
+# 本地节点查找, PT需要禁用, 默认:false
+#bt-enable-lpd=false
+# 种子交换, PT需要禁用, 默认:true
+#enable-peer-exchange=false
+# 每个种子限速, 对少种的PT很有用, 默认:50K
+#bt-request-peer-speed-limit=50K
+# 客户端伪装, PT需要
+peer-id-prefix=-TR2770-
+user-agent=Transmission/2.77
+# 当种子的分享率达到这个数时, 自动停止做种, 0为一直做种, 默认:1.0
+seed-ratio=0
+# 强制保存会话, 即使任务已经完成, 默认:false
+# 较新的版本开启后会在任务完成后依然保留.aria2文件
+#force-save=false
+# BT校验相关, 默认:true
+#bt-hash-check-seed=true
+# 继续之前的BT任务时, 无需再次校验, 默认:false
+bt-seed-unverified=true
+# 保存磁力链接元数据为种子文件(.torrent文件), 默认:false
+bt-save-metadata=true
+
+# bt-tracker数据来自https://github.com/ngosang/trackerslist/blob/master/trackers_all_udp.txt
+
+bt-tracker=udp://tracker.coppersurfer.tk:6969/announce,udp://tracker.leechers-paradise.org:6969/announce,udp://tracker.opentrackr.org:1337/announce,udp://tracker.zer0day.to:1337/announce,udp://9.rarbg.com:2710/announce,udp://p4p.arenabg.com:1337/announce,udp://explodie.org:6969/announce,udp://tracker.mg64.net:6969/announce,udp://mgtracker.org:2710/announce,udp://tracker.yoshi210.com:6969/announce,udp://tracker.tiny-vps.com:6969/announce,udp://tracker.skyts.net:6969/announce,udp://tracker.tordb.ml:6881/announce,udp://tracker.piratepublic.com:1337/announce,udp://tracker.grepler.com:6969/announce,udp://tracker.filetracker.pl:8089/announce,udp://tracker.edoardocolombo.eu:6969/announce,udp://ipv4.tracker.harry.lu:80/announce,udp://91.218.230.81:6969/announce,udp://tracker.vanitycore.co:6969/announce,udp://tracker.kuroy.me:5944/announce,udp://zephir.monocul.us:6969/announce,udp://tracker.desu.sh:6969/announce,udp://bt.xxx-tracker.com:2710/announce
+
+</code></pre>
+
+<p>4.配置开机启动。编辑<code>HideRun.vbs</code></p>
+
+<pre><code>WScript.CreateObject(&quot;WScript.Shell&quot;).Run &quot;D:\download\aria2\aria2c.exe --conf-path=D:\download\aria2\aria2.conf&quot;,0
+</code></pre>
+
+<blockquote>
+<p>windows下运行vbs文件:<code>cscript HideRun.vbs</code>,测试文件是否正常。如果提示错误，把符号重新输入一遍。</p>
+</blockquote>
+
+<p>5.将<code>HideRun.vbs</code>创建快捷方式到开机启动文件夹。例:<code>C:\Users\Admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code></p>
+
+<p>6.chrome添加<a href="https://chrome.google.com/webstore/detail/yaaw/hbjpfaalboebibgfmedmjijhbjapcnki?utm_source=chrome-ntp-icon">YAAW下载管理器-web界面</a> 页面，直接使用链接下载。</p>
+
+<p>7.YAAW的chrome版本,支持右键添加到YAAW进行下载<a href="https://chrome.google.com/webstore/detail/yaaw-for-chrome/dennnbdlpgjgbcjfgaohdahloollfgoc">YAAW for Chrome</a></p>
+
+<p>8.<a href="https://github.com/acgotaku/BaiduExporter">百度网盘插件 导出到aria2c下载功能</a></p>
+
+<h2 id="常见问题">常见问题</h2>
+
+<h3 id="internal-server-error">Internal server error</h3>
+
+<p>手动访问<code>http://hostname:port/jsonrpc?jsoncallback=1</code>，看否有返回。</p>
+
+<h4 id="文档参考">文档参考</h4>
+
+<p><a href="https://binux.blog/2012/12/aria2-examples/">aria2配置示例</a><br />
+<a href="https://aria2.github.io/manual/en/html/aria2c.html">aria2配置选项文档</a><br />
+<a href="https://pagebrin.com/2014/04/raspberry-pi%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%9B%9B%EF%BC%9A%E4%BD%BF%E7%94%A8aria2%E6%89%93%E9%80%A0%E4%B8%8B%E8%BD%BD%E5%88%A9%E5%99%A8/">Raspberry Pi技术笔记之四：使用aria2打造下载利器</a><br />
+<a href="http://aria2c.com/usage.html">Aria2 &amp; YAAW 使用说明&ndash;配置文件参考</a></p>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link" href="/tags/aria2c/" rel="tag">Aria2c</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/download/" rel="tag">download</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/tools/" rel="tag">Tools</a></li>
+	</ul>
+</div>
+
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Passer avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Passer</span>
+	</div>
+	<div class="authorbox__description">
+		Empty
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/2018/2018-01_git/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">Git操作(2)-配置文件及SSH配置</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next col-1-2">
+		<a class="post-nav__link" href="/post/2018/2018-01_shadowsocks/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">AWS搭建shadowsocks服务器</p></a>
+	</div>
+</nav>
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "passerzhang" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</main>
+
+<aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="//google.com/search">
+		<label>
+			<span class="screen-reader-text">Search for:</span>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="http://www.meetpasser.cc" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
+		</ul>
+	</div>
+</div>
+
+	
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
+		</ul>
+	</div>
+</div>
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/shanccc" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget__link widget__link--taglist" href="/tags/android" title="android">android</a>
+		<a class="widget__link widget__link--taglist" href="/tags/aria2c" title="aria2c">aria2c</a>
+		<a class="widget__link widget__link--taglist" href="/tags/awz" title="awz">awz</a>
+		<a class="widget__link widget__link--taglist" href="/tags/blog" title="blog">blog</a>
+		<a class="widget__link widget__link--taglist" href="/tags/download" title="download">download</a>
+		<a class="widget__link widget__link--taglist" href="/tags/git" title="git">git</a>
+		<a class="widget__link widget__link--taglist" href="/tags/github" title="github">github</a>
+		<a class="widget__link widget__link--taglist" href="/tags/go" title="go">go</a>
+		<a class="widget__link widget__link--taglist" href="/tags/hugo" title="hugo">hugo</a>
+		<a class="widget__link widget__link--taglist" href="/tags/jenkins" title="jenkins">jenkins</a>
+		<a class="widget__link widget__link--taglist" href="/tags/permission" title="permission">permission</a>
+		<a class="widget__link widget__link--taglist" href="/tags/proguard" title="proguard">proguard</a>
+		<a class="widget__link widget__link--taglist" href="/tags/shadowsocks" title="shadowsocks">shadowsocks</a>
+		<a class="widget__link widget__link--taglist" href="/tags/tools" title="tools">tools</a>
+		<a class="widget__link widget__link--taglist" href="/tags/%e4%b8%83%e7%89%9b%e4%ba%91" title="七牛云">七牛云</a>
+	</div>
+</div>
+</aside>
+
+	</div>
+		<footer class="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="container container-inner">
+				<p class="footer__copyright">&copy; 2018 Meet Stranger. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad theme</a>.</span></p>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script>
+</body>
+</html>

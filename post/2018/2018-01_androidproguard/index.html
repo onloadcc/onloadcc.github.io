@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Android 反编译与混淆</title>
+<meta name="description" content=" Passer&#39;s Personal blog about everything">
+<meta name="generator" content="Hugo 0.32.4" />
+<meta property="og:title" content="Android 反编译与混淆" />
+<meta property="og:description" content="Android 反编译与混淆" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.meetpasser.cc/post/2018/2018-01_androidproguard/" />
+
+
+
+<meta property="article:published_time" content="2017-06-02T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-06-02T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" type="text/css" media="all" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/js/scripts.js"></script>
+<link rel="shortcut icon" href="/favicon.ico">
+
+</head>
+<body class="body body-right-sidebar mobile" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div class="container container-outer">
+		<header class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<div class="container container-inner clearfix">
+				<div class="logo" role="banner" itemscope="itemscope" itemtype="http://schema.org/Brand">
+					<a class="logo__link" href="/" title="Meet Stranger" rel="home">
+						<h1 class="logo__title">Meet Stranger</h1>
+						<h2 class="logo__tagline">record something</h2>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/">MAIN</a></li>
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main-content content" role="main" itemprop="mainContentOfPage">
+	<article class="post">
+		<header class="post__header clearfix">
+			<h1 class="post__title">Android 反编译与混淆</h1>
+			<p class="post__meta meta">
+				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+				<time class="post__meta-date" datetime="2017-06-02T00:00:00">June 02, 2017</time>
+				<span class="post__meta-categories meta-categories">
+					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+					<a class="meta-categories__link" href="/categories/android" rel="category">Android</a></span>
+			</p>
+		</header>
+		<div class="post__content clearfix">
+			<p></p>
+
+<h3 id="反编译工具">反编译工具</h3>
+
+<p><a href="https://sourceforge.net/projects/dex2jar/?source=typ_redirect">dex2jar&ndash;dex文件转为jar文件</a></p>
+
+<pre><code>d2j-dex2jar classes.dex  		  
+</code></pre>
+
+<p><a href="http://jd.benow.ca/">jd-gui-查看jar文件</a></p>
+
+<p><a href="https://ibotpeaches.github.io/Apktool/install/">ApkTool-还原Apk中资源文件</a></p>
+
+<pre><code>apktool.bat d test.apk
+</code></pre>
+
+<blockquote>
+<p>d 代表 decode<br />
+可能异常：以前使用老版本<code>apktool</code>操作过，删除缓存文件<code>C:\Users\pc\AppData\Local\apktool\framework\1.apk</code>即可。</p>
+</blockquote>
+
+<h3 id="混淆">混淆</h3>
+
+<h4 id="1-在-app-model-的-build-gradle-文件中开启混淆">1. 在 app model 的 build.gradle 文件中开启混淆</h4>
+
+<pre><code>  buildTypes {
+    release {
+      //资源文件压缩
+      shrinkResources true
+      //代码开启混淆
+      minifyEnabled true
+      //混淆文件位置： 第一个：系统默认混淆文件。第二个：自定义混淆文件
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+      //资源文件压缩
+      shrinkResources true
+      //代码开启混淆
+      minifyEnabled true
+      //混淆文件位置： 第一个：系统默认混淆文件。第二个：自定义混淆文件
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+</code></pre>
+
+<h4 id="2-配置自定义的混淆文件">2. 配置自定义的混淆文件</h4>
+
+<pre><code>混淆需要排除的文件：
+
+- 通用排除的
+    - 四大组件，自定义的Application  
+    - native方法
+    - Activity中方法参数是View的方法(`layout`中的`onclick`事件)
+    - 枚举类中枚举相关方法
+    - 自定义控件（继承自View）
+    - Parcelable序列化类
+    - Serializable序列化类
+    - webView
+- 自己项目中使用的
+    - 反射类
+    - js交互
+    - 实体类（Json解析） 或添加`@keep`注解
+- 第三方依赖库        
+</code></pre>
+
+<pre><code># Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in D:\AppData\Local\Android\sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+ #Uncomment this to preserve the line number information for
+ #debugging stack traces.
+-keepattributes SourceFile,LineNumberTable
+
+ #If you keep the line number information, uncomment this to
+ #hide the original source file name.
+-renamesourcefileattribute SourceFile
+
+# 以上为系统默认
+
+############################################
+#
+# 对于一些基本指令的添加
+#
+#############################################
+# 代码混淆压缩比，在0~7之间，默认为5，一般不做修改
+-optimizationpasses 5
+
+# 混合时不使用大小写混合，混合后的类名为小写
+-dontusemixedcaseclassnames
+
+# 指定不去忽略非公共库的类
+-dontskipnonpubliclibraryclasses
+
+# 这句话能够使我们的项目混淆后产生映射文件
+# 包含有类名-&gt;混淆后类名的映射关系
+-verbose
+
+# 指定不去忽略非公共库的类成员
+-dontskipnonpubliclibraryclassmembers
+
+# 不做预校验，preverify是proguard的四个步骤之一，Android不需要preverify，去掉这一步能够加快混淆速度。
+-dontpreverify
+
+# 保留Annotation不混淆
+-keepattributes *Annotation*,InnerClasses
+
+# 避免混淆泛型 ？ 不知道用途
+-keepattributes Signature
+
+# 抛出异常时保留代码行号
+#-keepattributes SourceFile,LineNumberTable
+
+# 指定混淆是采用的算法，后面的参数是一个过滤器
+# 这个过滤器是谷歌推荐的算法，一般不做更改
+#-optimizations !code/simplification/cast,!field/*,!class/merging/*
+
+
+#############################################
+#
+# Android开发中一些需要保留的公共部分
+#
+#############################################
+
+# 保留我们使用的四大组件，自定义的Application等等这些类不被混淆
+# 因为这些子类都有可能被外部调用
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Appliction
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class * extends android.view.View
+-keep public class com.android.vending.licensing.ILicensingService
+
+
+# 保留support下的所有类及其内部类
+-keep class android.support.** {*;}
+
+# 保留继承的
+-keep public class * extends android.support.v4.**
+-keep public class * extends android.support.v7.**
+-keep public class * extends android.support.annotation.**
+
+# 保留R下面的资源
+-keep class **.R$* {*;}
+
+# 保留本地native方法不被混淆
+-keepclasseswithmembernames class * {
+    native &lt;methods&gt;;
+}
+
+# 保留在Activity中的方法参数是view的方法，
+# 这样以来我们在layout中写的onClick就不会被影响
+-keepclassmembers class * extends android.app.Activity{
+    public void *(android.view.View);
+}
+
+# 保留枚举类不被混淆
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# 保留我们自定义控件（继承自View）不被混淆
+-keep public class * extends android.view.View{
+    *** get*();
+    void set*(***);
+    public &lt;init&gt;(android.content.Context);
+    public &lt;init&gt;(android.content.Context, android.util.AttributeSet);
+    public &lt;init&gt;(android.content.Context, android.util.AttributeSet, int);
+}
+
+# 保留Parcelable序列化类不被混淆
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+# 保留Serializable序列化的类不被混淆
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient &lt;fields&gt;;
+    !private &lt;fields&gt;;
+    !private &lt;methods&gt;;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+# 对于带有回调函数的onXXEvent、**On*Listener的，不能被混淆
+-keepclassmembers class * {
+    void *(**On*Event);
+    void *(**On*Listener);
+}
+
+# webView处理，项目中没有使用到webView忽略即可
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+    public *;
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+
+# 移除Log类打印各个等级日志的代码，打正式包的时候可以做为禁log使用，这里可以作为禁止log打印的功能使用
+# 记得proguard-android.txt中一定不要加-dontoptimize才起作用
+# 另外的一种实现方案是通过BuildConfig.DEBUG的变量来控制
+#-assumenosideeffects class android.util.Log {
+#    public static int v(...);
+#    public static int i(...);
+#    public static int w(...);
+#    public static int d(...);
+#    public static int e(...);
+#}
+
+#############################################
+#
+# 项目中特殊处理部分
+#
+#############################################
+
+#-----------处理反射类---------------
+
+
+
+#-----------处理js交互---------------
+
+
+
+#-----------处理实体类---------------
+# 在开发的时候我们可以将所有的实体类放在一个包内，这样我们写一次混淆就行了。
+#-keep public class com.ljd.example.entity.** {
+#    public void set*(***);
+#    public *** get*();
+#    public *** is*();
+#}
+-keep class com.gc.caiba.bean.** { *; }
+
+#-----------处理第三方依赖库---------
+
+# ButterKnife 7
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* &lt;fields&gt;;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* &lt;methods&gt;;
+}
+
+
+## Square Picasso specific rules ##
+## https://square.github.io/picasso/ ##
+-dontwarn com.squareup.okhttp.**
+
+
+## GSON 2.2.4 specific rules ##
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+#-keepattributes Signature
+
+# For using GSON @Expose annotation
+#-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+
+
+#okhttputils
+-dontwarn com.zhy.http.**
+-keep class com.zhy.http.**{*;}
+
+# OkHttp
+#-keepattributes Signature
+#-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+# Okio
+#-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+#-dontwarn [class_filter] 声明不输出那些未找到的引用和一些错误，但续混淆。配置中的class_filter是一串正则表达式，被匹配到的类名相关的警告都不会被输出出来。
+
+
+# libs 目录当中的
+# common.jar
+#wheelpckker.jar
+#-keep class cn.qqtheme.framework.** { *; }
+
+
+# tbs_sdk
+-dontwarn com.tencent.**
+-keep class com.tencent.**{*;}
+-keep interface com.tencent.** { *; }
+
+# library model
+#-keep class com.shizhefei.** { *; }
+</code></pre>
+
+<h4 id="3-apk生成后-对应的-build-目录会产生日志文件-如-app-build-outputs-mapping-debug-mapping-txt">3. Apk生成后，对应的 build 目录会产生日志文件。如：<code>app/build/outputs/mapping/debug/mapping.txt</code></h4>
+
+<pre><code>dump.txt    描述APK文件中所有类的内部结构  
+mapping.txt  提供混淆前后类、方法、类成员等的对照表  
+resources.txt    
+seeds.txt  列出没有被混淆的类和成员  
+usage.txt  列出被移除的代码  
+</code></pre>
+
+<h4 id="4-查看错误日志">4. 查看错误日志</h4>
+
+<pre><code>使用`proguardgui`工具。位于sdk目录下，如`D:\develop\AndroidSDK\tools\proguard\bin\proguardgui.bat`  
+
+打开后点击左边最下角 `ReTrace` 选项： `Mapping file`中选择打包 apk 时生成的 `mapping.txt` 文件，将错误日志粘贴至 `Obfuscated stack trace` 编辑框中，点击 `ReTrace!`按纽即可。
+</code></pre>
+
+<h3 id="参考">参考</h3>
+
+<p><a href="http://android.jobbole.com/82641/">Android安全攻防战，反编译与混淆技术完全解析（上）</a><br />
+<a href="http://android.jobbole.com/82644/">Android安全攻防战，反编译与混淆技术完全解析（下）</a><br />
+<a href="http://webcache.googleusercontent.com/search?q=cache:rh6rF2kTQx8J:www.jianshu.com/p/60e82aafcfd0+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;gl=kh">Android Proguard(混淆)</a><br />
+<a href="https://webcache.googleusercontent.com/search?q=cache:y1lIFk5O-TAJ:https://www.diycode.cc/topics/380+&amp;cd=4&amp;hl=en&amp;ct=clnk&amp;gl=kh">写给 Android 开发者的混淆使用手册</a><br />
+<a href="http://webcache.googleusercontent.com/search?q=cache:rx0QPpjuZKUJ:www.jianshu.com/p/f9438603e096+&amp;cd=2&amp;hl=en&amp;ct=clnk&amp;gl=kh">Android Studio混淆模板及常用第三方混淆(看了都说好)</a><br />
+<a href="https://developer.android.com/studio/build/shrink-code.html#shrink-resources">Shrink Your Code and Resources</a><br />
+<a href="https://www.guardsquare.com/en/proguard/manual/gradle">ProGuard manual</a><br />
+<a href="https://github.com/yongjhih/android-proguards">android-proguards- 第三方开源库混淆文件参考</a><br />
+<a href="https://www.jianshu.com/p/60e82aafcfd0">混淆（Proguard）用法</a></p>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link" href="/tags/android/" rel="tag">Android</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/proguard/" rel="tag">Proguard</a></li>
+	</ul>
+</div>
+
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Passer avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Passer</span>
+	</div>
+	<div class="authorbox__description">
+		Empty
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<div class="post-nav__item post-nav__item--next col-1-2">
+		<a class="post-nav__link" href="/post/2017/2017-07_hugouse/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">Hugo 使用笔记</p></a>
+	</div>
+</nav>
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "passerzhang" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</main>
+
+<aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="//google.com/search">
+		<label>
+			<span class="screen-reader-text">Search for:</span>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="http://www.meetpasser.cc" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
+		</ul>
+	</div>
+</div>
+
+	
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
+		</ul>
+	</div>
+</div>
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/shanccc" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget__link widget__link--taglist" href="/tags/android" title="android">android</a>
+		<a class="widget__link widget__link--taglist" href="/tags/aria2c" title="aria2c">aria2c</a>
+		<a class="widget__link widget__link--taglist" href="/tags/awz" title="awz">awz</a>
+		<a class="widget__link widget__link--taglist" href="/tags/blog" title="blog">blog</a>
+		<a class="widget__link widget__link--taglist" href="/tags/download" title="download">download</a>
+		<a class="widget__link widget__link--taglist" href="/tags/git" title="git">git</a>
+		<a class="widget__link widget__link--taglist" href="/tags/github" title="github">github</a>
+		<a class="widget__link widget__link--taglist" href="/tags/go" title="go">go</a>
+		<a class="widget__link widget__link--taglist" href="/tags/hugo" title="hugo">hugo</a>
+		<a class="widget__link widget__link--taglist" href="/tags/jenkins" title="jenkins">jenkins</a>
+		<a class="widget__link widget__link--taglist" href="/tags/permission" title="permission">permission</a>
+		<a class="widget__link widget__link--taglist" href="/tags/proguard" title="proguard">proguard</a>
+		<a class="widget__link widget__link--taglist" href="/tags/shadowsocks" title="shadowsocks">shadowsocks</a>
+		<a class="widget__link widget__link--taglist" href="/tags/tools" title="tools">tools</a>
+		<a class="widget__link widget__link--taglist" href="/tags/%e4%b8%83%e7%89%9b%e4%ba%91" title="七牛云">七牛云</a>
+	</div>
+</div>
+</aside>
+
+	</div>
+		<footer class="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="container container-inner">
+				<p class="footer__copyright">&copy; 2018 Meet Stranger. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad theme</a>.</span></p>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script>
+</body>
+</html>

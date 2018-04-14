@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git操作(1)-基础命令</title>
+<meta name="description" content=" Passer&#39;s Personal blog about everything">
+<meta name="generator" content="Hugo 0.32.4" />
+<meta property="og:title" content="Git操作(1)-基础命令" />
+<meta property="og:description" content="Git基础命令" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.meetpasser.cc/post/2017/2017-10_git/" />
+
+
+
+<meta property="article:published_time" content="2017-10-04T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-10-04T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" type="text/css" media="all" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/js/scripts.js"></script>
+<link rel="shortcut icon" href="/favicon.ico">
+
+</head>
+<body class="body body-right-sidebar mobile" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div class="container container-outer">
+		<header class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<div class="container container-inner clearfix">
+				<div class="logo" role="banner" itemscope="itemscope" itemtype="http://schema.org/Brand">
+					<a class="logo__link" href="/" title="Meet Stranger" rel="home">
+						<h1 class="logo__title">Meet Stranger</h1>
+						<h2 class="logo__tagline">record something</h2>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/">MAIN</a></li>
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main-content content" role="main" itemprop="mainContentOfPage">
+	<article class="post">
+		<header class="post__header clearfix">
+			<h1 class="post__title">Git操作(1)-基础命令</h1>
+			<p class="post__meta meta">
+				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+				<time class="post__meta-date" datetime="2017-10-04T00:00:00">October 04, 2017</time>
+				<span class="post__meta-categories meta-categories">
+					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+					<a class="meta-categories__link" href="/categories/tools" rel="category">Tools</a></span>
+			</p>
+		</header>
+		<div class="post__content clearfix">
+			<p>版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修定情况的系统。从刚开始的本地版本控制系统（如RCS），到集中化的版本控制系统（Centralized Version Control Systems，简称 CVCS）如（CVS、Subversion），发展到如今的分布式版本控制系统（Distributed Version Control System，简称 DVCS）（如Git、Mercurial、Bazaar 以及 Darcs 等）。
+在DVCS中，客户端并不只是提取最新版本的文件快照，而是把代码仓库完整的克隆下来。这样不用考虑服务器是否会出现问题，都可以用任何一个镜像出来的本地仓库恢复。</p>
+
+<p></p>
+
+<h3 id="git基本知识">Git基本知识</h3>
+
+<h5 id="git特性">Git特性</h5>
+
+<ol>
+<li>直接记录文件快照，而非比较文件差异</li>
+<li>近乎所有操作都是本地执行</li>
+<li>时刻保持数据完整性（使用SHA-1算法对文件或目录结构计算得出SHA-1哈希值，当作指纹字符串。由40个字符组成（0-9a-f)</li>
+<li>多数操作仅仅是把数据添加到数据库</li>
+</ol>
+
+<h5 id="文件的三种状态">文件的三种状态</h5>
+
+<p>已提交 committed 文件已保存在本地数据库中<br />
+已修改 modified  修改了某个文件，还未提交<br />
+已暂存 staged   把已修改的文件放在下次提交时要保存的清单中</p>
+
+<h5 id="文件的三个工作区域">文件的三个工作区域</h5>
+
+<ol>
+<li>工作目录</li>
+<li>暂存区域</li>
+<li>本地仓库</li>
+</ol>
+
+<h5 id="基本的-git-工作流程如下">基本的 Git 工作流程如下</h5>
+
+<ol>
+<li>在工作目录中修改某些文件。</li>
+<li>对修改后的文件进行快照，然后保存到暂存区域。</li>
+<li>提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中</li>
+</ol>
+
+<h3 id="git基本操作">git基本操作</h3>
+
+<p>初始化仓库<br />
+<code>git init</code></p>
+
+<p>从现在仓库克隆<br />
+<code>git clone git://github.com/schacon/grit.git</code></p>
+
+<p>检查当前文件状态<br />
+<code>git status</code></p>
+
+<p>添加跟踪文件（添加README.md文件）<br />
+<code>git add &lt;filename&gt;</code></p>
+
+<h5 id="git-diff-各个区别">git diff 各个区别</h5>
+
+<p>工作目录 和 暂存区 改动<br />
+<code>git diff</code></p>
+
+<p>暂存区 和 本地仓库(git add为暂存区) 改动<br />
+<code>git diff --staged</code></p>
+
+<p>工作目录 和 本地仓库 改动<br />
+<code>git diff &lt;commit&gt; &lt;filename&gt;</code></p>
+
+<p>本地仓库 和 本地仓库 改动<br />
+<code>git diff &lt;commit&gt; &lt;commit&gt;</code></p>
+
+<p>暂存区 和 本地仓库 最后一次提交 改动<br />
+<code>git diff --staged -a</code></p>
+
+<p>移除文件<br />
+<code>git rm &lt;filename&gt;</code></p>
+
+<p>取消对文件的跟踪，但不删除当前文件<br />
+<code>git rm --cached &lt;filename&gt;</code></p>
+
+<p>查看最近的3次提交历史<br />
+<code>git log -3</code></p>
+
+<p>提交文件到本地<br />
+<code>git commit -m '第一次提交'</code></p>
+
+<p>添加修改文件到最后一次提交（提交之后发现漏掉了文件没有添加）<br />
+<code>git commit --amend</code></p>
+
+<p>取消已经暂存的文件<br />
+<code>git reset head &lt;filename&gt;</code></p>
+
+<p>取消对文件的修改<br />
+<code>git checkout -- &lt;filename&gt;</code></p>
+
+<h3 id="恢复文件">恢复文件</h3>
+
+<p>本地代码跳转到某次提交
+<code>git reset --hard HEAD~1</code></p>
+
+<p>反转提交，取消历史提交。相当于用一个新提交来消除一个历史提交所做的任何修改。
+恢复 888e26 次提交，使用下面的命令，再push到服务器即可
+<code>git revert 888e26</code></p>
+
+<p><a href="http://yijiebuyi.com/blog/8f985d539566d0bf3b804df6be4e0c90.html">git reset revert 回退回滚取消提交返回上一版本</a></p>
+
+<h3 id="本地分支操作">本地分支操作</h3>
+
+<p>创建新分支<br />
+<code>git checkout -b issue53</code></p>
+
+<p>添加-b参数相当于：<br />
+<code>git branch issue53
+git checkout issue53
+</code></p>
+
+<p>切换到分支<br />
+<code>git checkout issue53</code></p>
+
+<p>合并本地分支<br />
+<code>git merge issue53</code></p>
+
+<p>删除本地分支<br />
+<code>git branch -d issue53</code></p>
+
+<h3 id="git远程分支操作">git远程分支操作</h3>
+
+<p>同步服务器的数据到本地<br />
+<code>git fetch origin</code></p>
+
+<p>推送本地分支到远程分支 <code>git push (远程仓库名) (分支名)</code><br />
+<code>git push origin serverfix</code></p>
+
+<p>合并远程分支<br />
+<code>git merge origin/serverfix</code></p>
+
+<p>从远程分支创建本地分支<code>git checkout -b [分支名] [远程名]/[分支名]</code><br />
+<code>git checkout -b serverfix origin/serverfix  
+或者  
+git checkout --track origin/serverfix
+</code></p>
+
+<p>删除远程分支,语法<code>git push [远程名] [本地分支]:[远程分支]</code><br />
+<code>git push origin :serverfix</code></p>
+
+<p>查看远程分支列表<br />
+<code>git branch -r</code></p>
+
+<p>查看本地分支和远程分支关联<br />
+<code>git branch -vv</code></p>
+
+<p>将本地分支与远程分支进行关联(&ndash;set-upstream-to 最终修改的 .git/config 文件)<br />
+<code>git branch --set-upstream-to=origin/cbranch</code></p>
+
+<blockquote>
+<p>之前git操作时，本地从主分支开了一个新分支后，新分支在studio图形界面提交时老是需要手动输入运程分支名称，问题是没有将新分支与远程分支进行关联，关联后图形界面提交正常。</p>
+</blockquote>
+
+<h3 id="git标签">git标签</h3>
+
+<p>列出已有的标签<br />
+<code>git tag</code></p>
+
+<p>显示相应标签的版本信息<br />
+<code>git show v1.4</code></p>
+
+<p>新建含附注的标签 annotated<br />
+<code>git tag -a v1.4 -m 'my version 1.4'</code></p>
+
+<p>新建轻量级的标签 lightweight<br />
+<code>git tag v1.4-lw</code></p>
+
+<p>推送所有tag到服务器<br />
+<code>git push --tags</code>
+<code>git push orign &lt;tag_name&gt;</code></p>
+
+<p><a href="https://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF">3.5 Git 分支 - 远程分支</a><br />
+<a href="https://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6">3.2 Git 分支 - 分支的新建与合并</a><br />
+<a href="http://www.jianshu.com/p/fc433b1686bd">Git - 新建本地分支与远程分支关联问题</a><br />
+<a href="https://git-scm.com/book/zh/v1/%E8%B5%B7%E6%AD%A5-Git-%E5%9F%BA%E7%A1%80">起步 - Git 基础</a><br />
+<a href="https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E8%AE%B0%E5%BD%95%E6%AF%8F%E6%AC%A1%E6%9B%B4%E6%96%B0%E5%88%B0%E4%BB%93%E5%BA%93#忽略某些文件">git忽略文件</a><br />
+<a href="http://www.jianshu.com/p/80542dc3164e">Git：git diff 命令详解</a><br />
+<a href="http://www.ruanyifeng.com/blog/2012/08/how_to_read_diff.html">读懂diff</a></p>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link" href="/tags/git/" rel="tag">git</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/github/" rel="tag">github</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/tools/" rel="tag">tools</a></li>
+	</ul>
+</div>
+
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Passer avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Passer</span>
+	</div>
+	<div class="authorbox__description">
+		Empty
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/2017/2017-07_hugouse/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">Hugo 使用笔记</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next col-1-2">
+		<a class="post-nav__link" href="/post/2018/2018-01_git/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">Git操作(2)-配置文件及SSH配置</p></a>
+	</div>
+</nav>
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "passerzhang" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</main>
+
+<aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="//google.com/search">
+		<label>
+			<span class="screen-reader-text">Search for:</span>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="http://www.meetpasser.cc" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
+		</ul>
+	</div>
+</div>
+
+	
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
+		</ul>
+	</div>
+</div>
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/shanccc" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget__link widget__link--taglist" href="/tags/android" title="android">android</a>
+		<a class="widget__link widget__link--taglist" href="/tags/aria2c" title="aria2c">aria2c</a>
+		<a class="widget__link widget__link--taglist" href="/tags/awz" title="awz">awz</a>
+		<a class="widget__link widget__link--taglist" href="/tags/blog" title="blog">blog</a>
+		<a class="widget__link widget__link--taglist" href="/tags/download" title="download">download</a>
+		<a class="widget__link widget__link--taglist" href="/tags/git" title="git">git</a>
+		<a class="widget__link widget__link--taglist" href="/tags/github" title="github">github</a>
+		<a class="widget__link widget__link--taglist" href="/tags/go" title="go">go</a>
+		<a class="widget__link widget__link--taglist" href="/tags/hugo" title="hugo">hugo</a>
+		<a class="widget__link widget__link--taglist" href="/tags/jenkins" title="jenkins">jenkins</a>
+		<a class="widget__link widget__link--taglist" href="/tags/permission" title="permission">permission</a>
+		<a class="widget__link widget__link--taglist" href="/tags/proguard" title="proguard">proguard</a>
+		<a class="widget__link widget__link--taglist" href="/tags/shadowsocks" title="shadowsocks">shadowsocks</a>
+		<a class="widget__link widget__link--taglist" href="/tags/tools" title="tools">tools</a>
+		<a class="widget__link widget__link--taglist" href="/tags/%e4%b8%83%e7%89%9b%e4%ba%91" title="七牛云">七牛云</a>
+	</div>
+</div>
+</aside>
+
+	</div>
+		<footer class="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="container container-inner">
+				<p class="footer__copyright">&copy; 2018 Meet Stranger. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad theme</a>.</span></p>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script>
+</body>
+</html>

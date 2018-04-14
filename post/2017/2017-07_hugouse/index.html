@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hugo 使用笔记</title>
+<meta name="description" content=" Passer&#39;s Personal blog about everything">
+<meta name="generator" content="Hugo 0.32.4" />
+<meta property="og:title" content="Hugo 使用笔记" />
+<meta property="og:description" content="Hugo 使用过程中记录，不定期更新" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.meetpasser.cc/post/2017/2017-07_hugouse/" />
+
+
+
+<meta property="article:published_time" content="2017-09-13T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-09-13T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700" type="text/css" media="all" />
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/js/scripts.js"></script>
+<link rel="shortcut icon" href="/favicon.ico">
+
+</head>
+<body class="body body-right-sidebar mobile" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+	<div class="container container-outer">
+		<header class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<div class="container container-inner clearfix">
+				<div class="logo" role="banner" itemscope="itemscope" itemtype="http://schema.org/Brand">
+					<a class="logo__link" href="/" title="Meet Stranger" rel="home">
+						<h1 class="logo__title">Meet Stranger</h1>
+						<h2 class="logo__tagline">record something</h2>
+					</a>
+				</div>
+			</div>
+			
+<nav class="menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<ul class="menu__list">
+		<li class="menu__item"><a class="menu__link" href="/">MAIN</a></li>
+		<li class="menu__item"><a class="menu__link" href="/about/">ABOUT</a></li>
+	</ul>
+</nav>
+
+		</header>
+		<div class="wrapper clearfix">
+
+<main class="main-content content" role="main" itemprop="mainContentOfPage">
+	<article class="post">
+		<header class="post__header clearfix">
+			<h1 class="post__title">Hugo 使用笔记</h1>
+			<p class="post__meta meta">
+				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
+				<time class="post__meta-date" datetime="2017-09-13T00:00:00">September 13, 2017</time>
+				<span class="post__meta-categories meta-categories">
+					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+					<a class="meta-categories__link" href="/categories/tools" rel="category">Tools</a></span>
+			</p>
+		</header>
+		<div class="post__content clearfix">
+			<figure class="post__thumbnail">
+				<img src="/img/hugo-logo.png" alt="Hugo 使用笔记">
+			</figure>
+			<p>Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。</p>
+
+<p></p>
+
+<h3 id="开始使用">开始使用</h3>
+
+<h4 id="创建站点">创建站点</h4>
+
+<pre><code class="language-bash">hugo new site hello 
+</code></pre>
+
+<h4 id="添加主题">添加主题</h4>
+
+<pre><code class="language-bash">cd hello/themes
+
+$ git clone https://github.com/vimux/mainroad
+</code></pre>
+
+<p>使用<a href="https://github.com/Vimux/Mainroad/">mainroad</a>主题</p>
+
+<p>下载完成后进入<code>themes/mainroad/exampleSite</code>目录，将所有文件拷贝并覆盖到<code>hello</code>根目录。</p>
+
+<h4 id="添加文章">添加文章</h4>
+
+<p>添加到<code>post</code>目录</p>
+
+<pre><code class="language-bash">hugo new post/first.md
+</code></pre>
+
+<h4 id="本地运行">本地运行</h4>
+
+<pre><code class="language-bash">hugo server
+</code></pre>
+
+<p>浏览器访问 <a href="http://localhost:1313/">http://localhost:1313/</a></p>
+
+<h4 id="生成网站目录">生成网站目录</h4>
+
+<pre><code class="language-bash">hugo
+</code></pre>
+
+<p>生成之后在<code>hello</code>下生成<code>pulic</code>目录，全部上传至网站即可。</p>
+
+<h3 id="文章编写">文章编写</h3>
+
+<h4 id="文章列表预览内容控制">文章列表预览内容控制</h4>
+
+<p>在文章内部，不需要展示在列表中进行预览的前面添加一行 <code>&lt;!--more--&gt;</code> ，列表预览
+就只显示前面的内容，后面的内容不再显示。</p>
+
+<h3 id="参考">参考</h3>
+
+<p><a href="https://vinga.ml/hugo/">使用Hugo搭建惊艳个人博客</a><br />
+<a href="https://gohugo.io/">HUGO 官网</a><br />
+<a href="http://www.gohugo.org/">Hugo中文文档</a><br />
+<a href="http://www.gohugo.org/doc/overview/configuration/">配置 Hugo&ndash; config.tomal参数介绍</a><br />
+<a href="https://gohugo.io/content-management/formats/">文章格式化支持&ndash;Supported Content Formats</a></p>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link" href="/tags/hugo/" rel="tag">hugo</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/go/" rel="tag">go</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/blog/" rel="tag">blog</a></li>
+	</ul>
+</div>
+
+	</article>
+	
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Passer avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Passer</span>
+	</div>
+	<div class="authorbox__description">
+		Empty
+	</div>
+</div>
+	
+<nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+	<div class="post-nav__item post-nav__item--prev col-1-2">
+		<a class="post-nav__link" href="/post/2018/2018-01_androidproguard/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">Android 反编译与混淆</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next col-1-2">
+		<a class="post-nav__link" href="/post/2017/2017-10_git/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">Git操作(1)-基础命令</p></a>
+	</div>
+</nav>
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "passerzhang" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+</main>
+
+<aside class="sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+	
+<div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="//google.com/search">
+		<label>
+			<span class="screen-reader-text">Search for:</span>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="http://www.meetpasser.cc" />
+	</form>
+</div>
+	
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
+		</ul>
+	</div>
+</div>
+
+	
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
+		</ul>
+	</div>
+</div>
+	
+<div class="widget-social widget">
+	<h4 class="widget-social__title widget__title">Social</h4>
+	<div class="widget-social__content widget__content">
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="GitHub" rel="noopener noreferrer" href="https://github.com/shanccc" target="_blank">
+				<svg class="widget-social__link-icon icon-github" viewBox="0 0 384 374" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="#fff"><path d="m192 0c-106.1 0-192 85.8-192 191.7 0 84.7 55 156.6 131.3 181.9 9.6 1.8 13.1-4.2 13.1-9.2 0-4.6-.2-16.6-.3-32.6-53.4 11.6-64.7-25.7-64.7-25.7-8.7-22.1-21.3-28-21.3-28-17.4-11.9 1.3-11.6 1.3-11.6 19.3 1.4 29.4 19.8 29.4 19.8 17.1 29.3 44.9 20.8 55.9 15.9 1.7-12.4 6.7-20.8 12.2-25.6-42.6-4.8-87.5-21.3-87.5-94.8 0-20.9 7.5-38 19.8-51.4-2-4.9-8.6-24.3 1.9-50.7 0 0 16.1-5.2 52.8 19.7 15.3-4.2 31.7-6.4 48.1-6.5 16.3.1 32.7 2.2 48.1 6.5 36.7-24.8 52.8-19.7 52.8-19.7 10.5 26.4 3.9 45.9 1.9 50.7 12.3 13.4 19.7 30.5 19.7 51.4 0 73.7-44.9 89.9-87.7 94.6 6.9 5.9 13 17.6 13 35.5 0 25.6-.2 46.3-.2 52.6 0 5.1 3.5 11.1 13.2 9.2 76.2-25.5 131.2-97.3 131.2-182 0-105.9-86-191.7-192-191.7z"/></svg>
+				<span>GitHub</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+	
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget__link widget__link--taglist" href="/tags/android" title="android">android</a>
+		<a class="widget__link widget__link--taglist" href="/tags/aria2c" title="aria2c">aria2c</a>
+		<a class="widget__link widget__link--taglist" href="/tags/awz" title="awz">awz</a>
+		<a class="widget__link widget__link--taglist" href="/tags/blog" title="blog">blog</a>
+		<a class="widget__link widget__link--taglist" href="/tags/download" title="download">download</a>
+		<a class="widget__link widget__link--taglist" href="/tags/git" title="git">git</a>
+		<a class="widget__link widget__link--taglist" href="/tags/github" title="github">github</a>
+		<a class="widget__link widget__link--taglist" href="/tags/go" title="go">go</a>
+		<a class="widget__link widget__link--taglist" href="/tags/hugo" title="hugo">hugo</a>
+		<a class="widget__link widget__link--taglist" href="/tags/jenkins" title="jenkins">jenkins</a>
+		<a class="widget__link widget__link--taglist" href="/tags/permission" title="permission">permission</a>
+		<a class="widget__link widget__link--taglist" href="/tags/proguard" title="proguard">proguard</a>
+		<a class="widget__link widget__link--taglist" href="/tags/shadowsocks" title="shadowsocks">shadowsocks</a>
+		<a class="widget__link widget__link--taglist" href="/tags/tools" title="tools">tools</a>
+		<a class="widget__link widget__link--taglist" href="/tags/%e4%b8%83%e7%89%9b%e4%ba%91" title="七牛云">七牛云</a>
+	</div>
+</div>
+</aside>
+
+	</div>
+		<footer class="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<div class="container container-inner">
+				<p class="footer__copyright">&copy; 2018 Meet Stranger. <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad theme</a>.</span></p>
+			</div>
+		</footer>
+	</div>
+
+<script>
+	var navigation = responsiveNav(".menu", {
+		navClass: "menu--collapse",
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-04_deployingandroidappwithjenkins/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-03_androidpermission/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-01_shadowsocks/</loc>
+    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-01_aria2cdownloadtool/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-01_git/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2017/2017-10_git/</loc>
+    <lastmod>2017-10-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/about/</loc>
+    <lastmod>2017-09-13T14:51:34+07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2017/2017-07_hugouse/</loc>
+    <lastmod>2017-09-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/2018/2018-01_androidproguard/</loc>
+    <lastmod>2017-06-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/categories/android/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/android/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/aria2c/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/awz/</loc>
+    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/blog/</loc>
+    <lastmod>2017-09-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/categories/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/download/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/git/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/github/</loc>
+    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/go/</loc>
+    <lastmod>2017-09-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/hugo/</loc>
+    <lastmod>2017-09-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/jenkins/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/permission/</loc>
+    <lastmod>2018-04-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/post/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/proguard/</loc>
+    <lastmod>2017-06-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/shadowsocks/</loc>
+    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/categories/tools/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/tools/</loc>
+    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.meetpasser.cc/tags/%E4%B8%83%E7%89%9B%E4%BA%91/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
