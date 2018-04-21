@@ -48,13 +48,13 @@
   </url>
   
   <url>
-    <loc>http://meetpasser.cc/tags/android/</loc>
+    <loc>http://meetpasser.cc/categories/android/</loc>
     <lastmod>2018-04-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://meetpasser.cc/categories/android/</loc>
+    <loc>http://meetpasser.cc/tags/android/</loc>
     <lastmod>2018-04-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -156,14 +156,14 @@
   </url>
   
   <url>
-    <loc>http://meetpasser.cc/tags/tools/</loc>
-    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
+    <loc>http://meetpasser.cc/categories/tools/</loc>
+    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://meetpasser.cc/categories/tools/</loc>
-    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <loc>http://meetpasser.cc/tags/tools/</loc>
+    <lastmod>2018-02-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

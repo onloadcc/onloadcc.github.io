@@ -206,8 +206,14 @@ git checkout issue53
 <p>推送本地分支到远程分支 <code>git push (远程仓库名) (分支名)</code><br />
 <code>git push origin serverfix</code></p>
 
+<p>拉取分支代码
+<code>git featch origin</code></p>
+
 <p>合并远程分支<br />
 <code>git merge origin/serverfix</code></p>
+
+<p>合并远程分支<br />
+<code>git pull origin bugfix</code> 相当于同时执行<code>featch</code>和<code>merge</code></p>
 
 <p>从远程分支创建本地分支<code>git checkout -b [分支名] [远程名]/[分支名]</code><br />
 <code>git checkout -b serverfix origin/serverfix  
