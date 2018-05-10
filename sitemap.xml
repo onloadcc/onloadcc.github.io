@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://meetpasser.cc/post/2018/usejenkinspushtogit/</loc>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://meetpasser.cc/post/2018/2018-04_deployingandroidappwithjenkins/</loc>
     <lastmod>2018-04-13T00:00:00+00:00</lastmod>
   </url>
@@ -91,7 +96,7 @@
   
   <url>
     <loc>http://meetpasser.cc/tags/git/</loc>
-    <lastmod>2018-01-30T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -115,13 +120,19 @@
   
   <url>
     <loc>http://meetpasser.cc/tags/jenkins/</loc>
-    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://meetpasser.cc/categories/jenkins/</loc>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://meetpasser.cc/</loc>
-    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -133,7 +144,7 @@
   
   <url>
     <loc>http://meetpasser.cc/post/</loc>
-    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -163,7 +174,7 @@
   
   <url>
     <loc>http://meetpasser.cc/categories/tools/</loc>
-    <lastmod>2018-04-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

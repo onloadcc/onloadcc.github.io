@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Android权限申请</title>
+<title>Jenkins实现Git提交</title>
 <meta name="description" content=" Passer&#39;s Personal blog about everything">
 <meta name="generator" content="Hugo 0.32.4" />
-<meta property="og:title" content="Android权限申请" />
-<meta property="og:description" content="Android权限申请，流程" />
+<meta property="og:title" content="Jenkins实现Git提交" />
+<meta property="og:description" content="Jenkins实现Git提交。push changes to github after jenkins build completes" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://meetpasser.cc/post/2018/2018-03_androidpermission/" />
+<meta property="og:url" content="http://meetpasser.cc/post/2018/usejenkinspushtogit/" />
 
 
 
-<meta property="article:published_time" content="2018-04-01T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2018-05-10T00:00:00&#43;00:00"/>
 
-<meta property="article:modified_time" content="2018-04-01T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-05-10T00:00:00&#43;00:00"/>
 
 
 
@@ -68,218 +68,60 @@ ga('send', 'pageview');
 <main class="main-content content" role="main" itemprop="mainContentOfPage">
 	<article class="post">
 		<header class="post__header clearfix">
-			<h1 class="post__title">Android权限申请</h1>
+			<h1 class="post__title">Jenkins实现Git提交</h1>
 			<p class="post__meta meta">
 				<svg class="icon icon-time" height="14" viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg"><path d="m8-.0000003c-4.4 0-8 3.6-8 8 0 4.4000003 3.6 8.0000003 8 8.0000003 4.4 0 8-3.6 8-8.0000003 0-4.4-3.6-8-8-8zm0 14.4000003c-3.52 0-6.4-2.88-6.4-6.4000003 0-3.52 2.88-6.4 6.4-6.4 3.52 0 6.4 2.88 6.4 6.4 0 3.5200003-2.88 6.4000003-6.4 6.4000003zm.4-10.4000003h-1.2v4.8l4.16 2.5600003.64-1.04-3.6-2.1600003z"/></svg>
-				<time class="post__meta-date" datetime="2018-04-01T00:00:00">April 01, 2018</time>
+				<time class="post__meta-date" datetime="2018-05-10T00:00:00">May 10, 2018</time>
 				<span class="post__meta-categories meta-categories">
 					<svg class="icon icon-category" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
-					<a class="meta-categories__link" href="/categories/android" rel="category">Android</a></span>
+					<a class="meta-categories__link" href="/categories/jenkins" rel="category">Jenkins</a>, <a class="meta-categories__link" href="/categories/tools" rel="category">Tools</a></span>
 			</p>
 		</header>
 		<div class="post__content clearfix">
-			<p></p>
-
-<p>　　安卓在6.0    (23)之后，增加了权限管理。权限分类三类：普通权限(Normal)，签名权限(Signature)和危险权限(Dangerous)。前两个在安装应用时系统会自动授予，危险权限必须需要用户手动授权。</p>
-
-<p>　　所有的危险权限都属于权限组。如果对同一组内的一个权限有授权过，则访问同一组内的其它权限时系统会自动授予权限，不用再次请求用户。</p>
+			<p>最近项目需求需要在jenkins构建成功后把生成的指定文件上传到git仓库中去，以便后续使用。到网上找没有个完整的步骤，就整理下步骤，方便后续使用。用到的插件有<code>Git Publisher</code>，git相关插件是默认安装好的。</p>
 
 <p></p>
 
-<h2 id="dangerous-permissions-and-permission-groups">Dangerous permissions and permission groups</h2>
+<h3 id="1-新建一个项目-源码管理中选择git-并配置好源码库信息">1. 新建一个项目，源码管理中选择Git，并配置好源码库信息。</h3>
 
-<p class="table-caption" id="permission-groups">
-  <strong>Table 1.</strong> Dangerous permissions and permission groups.
-</p>
+<h3 id="2-然后处理需要更改的文件或添加文件">2. 然后处理需要更改的文件或添加文件。</h3>
 
-<table>
-<tr>
-  <th scope="col">Permission Group</th>
-  <th scope="col">Permissions</th>
-</tr>
+<h3 id="3-在构建步骤中添加-增加构建步骤-execute-shell-在-command-中填写">3. 在构建步骤中添加<code>增加构建步骤</code>，<code>Execute shell</code>。在<code>Command</code>中填写：</h3>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#CALENDAR">CALENDAR</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_CALENDAR">READ_CALENDAR</a></code>
-      </li>
-    </ul>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#WRITE_CALENDAR">WRITE_CALENDAR</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
+<pre><code>git add *   #添加指定文件
+git commit -m &quot;jenkins add new file&quot; #文件提交到本地仓库中
+</code></pre>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#CAMERA">CAMERA</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#CAMERA">CAMERA</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#CONTACTS">CONTACTS</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_CONTACTS">READ_CONTACTS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#WRITE_CONTACTS">WRITE_CONTACTS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#GET_ACCOUNTS">GET_ACCOUNTS</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
+<figure >
+    
+        <img src="/img/jenkins/jenkins_add_git_shell.png" alt="add file shell" width="700px" height="200px" />
+    
+    
+</figure>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#LOCATION">LOCATION</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_FINE_LOCATION">ACCESS_FINE_LOCATION</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_COARSE_LOCATION">ACCESS_COARSE_LOCATION</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#MICROPHONE">MICROPHONE</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO">RECORD_AUDIO</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
+<p></p> 
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#PHONE">PHONE</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_PHONE_STATE">READ_PHONE_STATE</a></code>
-      </li>
-      <li>
-          <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_PHONE_NUMBERS">READ_PHONE_NUMBERS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#CALL_PHONE">CALL_PHONE</a></code>
-      </li>
-      <li>
-          <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#ANSWER_PHONE_CALLS">ANSWER_PHONE_CALLS</a></code> (<em>must request at runtime</em>)
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_CALL_LOG">READ_CALL_LOG</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#WRITE_CALL_LOG">WRITE_CALL_LOG</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#ADD_VOICEMAIL">ADD_VOICEMAIL</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#USE_SIP">USE_SIP</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#PROCESS_OUTGOING_CALLS">PROCESS_OUTGOING_CALLS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#ANSWER_PHONE_CALLS">ANSWER_PHONE_CALLS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_PHONE_NUMBERS">READ_PHONE_NUMBERS</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
+<h3 id="4-在构建后操作中使用-git-publisher-插件进行代码提交">4. 在构建后操作中使用<code>Git Publisher</code>插件进行代码提交。</h3>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#SENSORS">SENSORS</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#BODY_SENSORS">BODY_SENSORS</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
 
-<tr>
-  <td><code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#SMS">SMS</a></code></td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#SEND_SMS">SEND_SMS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#RECEIVE_SMS">RECEIVE_SMS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_SMS">READ_SMS</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#RECEIVE_WAP_PUSH">RECEIVE_WAP_PUSH</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#RECEIVE_MMS">RECEIVE_MMS</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
+<figure >
+    
+        <img src="/img/jenkins/jenkins_git_publisher.png" alt="git publisher setting" width="700px" height="800px" />
+    
+    
+</figure>
 
-<tr>
-  <td>
-    <code><a href="https://developer.android.com/reference/android/Manifest.permission_group.html#STORAGE">STORAGE</a></code>
-  </td>
-  <td>
-    <ul>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#READ_EXTERNAL_STORAGE">READ_EXTERNAL_STORAGE</a></code>
-      </li>
-      <li>
-        <code><a href="https://developer.android.com/reference/android/Manifest.permission.html#WRITE_EXTERNAL_STORAGE">WRITE_EXTERNAL_STORAGE</a></code>
-      </li>
-    </ul>
-  </td>
-</tr>
 
-</table>
-
-<h2 id="权限申请流程-请对照-官方介绍-https-developer-android-com-guide-topics-permissions-index-html-可以翻译中文">权限申请流程，请对照<a href="https://developer.android.com/guide/topics/permissions/index.html">官方介绍</a>，可以翻译中文。</h2>
-
-<p>安利一张图作下流程介绍(也包含小米申请流程)：</p>
-
-<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:65vw;" src="https://www.processon.com/embed/5ab50deae4b02cee4ce8ca90"></iframe>
-
-<h2 id="使用时当然需要作封装了-推荐几个库">使用时当然需要作封装了，推荐几个库</h2>
-
-<p><a href="https://github.com/permissions-dispatcher/PermissionsDispatcher">PermissionsDispatcher－使用注解方便申请</a></p>
-
-<p><a href="https://github.com/googlesamples/easypermissions">easypermissions</a></p>
-
-<p><a href="https://github.com/dfqin/PermissionGrantor">一行代码搞定Android6.0动态权限授权、权限管理-将权限申请封装到单独Activity中，方便调用。不再每个界面都写<code>onRequestPermissionsResult</code></a></p>
+<p></p>
 		</div>
 		
 <div class="post__tags tags clearfix">
 	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m4.73135 3.3795002q0-.5597-.39604-.9557-.39604-.3961-.95577-.3961-.55974 0-.95578.3961-.39604.396-.39604.9557 0 .5598.39604.9558.39604.3961.95578.3961.55973 0 .95577-.3961.39604-.396.39604-.9558zm11.26865 6.0832q0 .5596998-.39076.9504998l-5.18548 5.196q-.41188.3908-.9610504.3908-.55974 0-.9505-.3908l-7.5511496-7.5616998q-.40132-.3907-.68119-1.0666-.27987-.6759-.27987-1.2357v-4.3934q0-.54920004.40132-.95050004.40132-.4013.9505-.4013h4.39339q.55974 0 1.23565.2799.67591.2798 1.07723.6812l7.55115 7.54060004q.39076.4118.39076.961z"/></svg>
 	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link" href="/tags/android/" rel="tag">Android</a></li>
-		<li class="tags__item"><a class="tags__link" href="/tags/permission/" rel="tag">Permission</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/jenkins/" rel="tag">Jenkins</a></li>
+		<li class="tags__item"><a class="tags__link" href="/tags/git/" rel="tag">Git</a></li>
 	</ul>
 </div>
 
@@ -299,10 +141,7 @@ ga('send', 'pageview');
 	
 <nav class="post-nav row clearfix" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
 	<div class="post-nav__item post-nav__item--prev col-1-2">
-		<a class="post-nav__link" href="/post/2018/2018-01_shadowsocks/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">AWS搭建shadowsocks服务器</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next col-1-2">
-		<a class="post-nav__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">使用Jenkins布署Android打包平台</p></a>
+		<a class="post-nav__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">使用Jenkins布署Android打包平台</p></a>
 	</div>
 </nav>
 

@@ -451,6 +451,9 @@ mv jenkins.war  /usr/local/tomcat/webapps/
 
 <p>构建后执行脚本插件<a href="https://wiki.jenkins.io/display/JENKINS/PostBuildScript+Plugin">PostBuildScript Plugin</a>,可执行shell,groovy,gradle等脚本。</p>
 
+<p>项目之间传递参数插件<a href="https://wiki.jenkins.io/display/JENKINS/Parameterized+Trigger+Plugin">Parameterized Trigger Plugin</a><br />
+可在项目构建完成后启动其它项目时传递参数过去。</p>
+
 <h3 id="待解决">？待解决</h3>
 
 <p>Q:　jenkins执行groovy脚本时权限处理？如何直接执行不需要批准？　</p>
@@ -528,6 +531,9 @@ Build step 'Execute Scripts' marked build as failure
 	<div class="post-nav__item post-nav__item--prev col-1-2">
 		<a class="post-nav__link" href="/post/2018/2018-03_androidpermission/" rel="prev"><span class="post-nav__caption">«Previous</span><p class="post-nav__post-title">Android权限申请</p></a>
 	</div>
+	<div class="post-nav__item post-nav__item--next col-1-2">
+		<a class="post-nav__link" href="/post/2018/usejenkinspushtogit/" rel="next"><span class="post-nav__caption">Next»</span><p class="post-nav__post-title">Jenkins实现Git提交</p></a>
+	</div>
 </nav>
 
 	
@@ -573,11 +579,11 @@ Build step 'Execute Scripts' marked build as failure
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/2018/usejenkinspushtogit/">Jenkins实现Git提交</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-04_deployingandroidappwithjenkins/">使用Jenkins布署Android打包平台</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-03_androidpermission/">Android权限申请</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_shadowsocks/">AWS搭建shadowsocks服务器</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_aria2cdownloadtool/">Aria2c下载工具</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/2018/2018-01_git/">Git操作(2)-配置文件及SSH配置</a></li>
 		</ul>
 	</div>
 </div>
@@ -588,6 +594,7 @@ Build step 'Execute Scripts' marked build as failure
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item"><a class="widget__link" href="/categories/android">Android</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/jenkins">Jenkins</a></li>
 			<li class="widget__item"><a class="widget__link" href="/categories/tools">Tools</a></li>
 		</ul>
 	</div>
