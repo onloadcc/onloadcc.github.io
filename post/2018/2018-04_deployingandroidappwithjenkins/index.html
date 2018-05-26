@@ -82,7 +82,11 @@ ga('send', 'pageview');
 
 <p></p>
 
-<h3 id="环境检查下">环境检查下</h3>
+<h3 id="环境检查">环境检查</h3>
+
+<p>服务器配置建议：<br />
+首先选国外的，你懂的。<br />
+内存4G以上。默认2G会提示<code>Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)</code>错误，由内存不足引起。</p>
 
 <pre><code>### 操作系统版本
 cat /etc/redhat-release　　
@@ -109,7 +113,7 @@ cat /proc/meminfo
 
 <h5 id="1-jdk安装">1.JDK安装</h5>
 
-<p>系统自带的jdk功能少，例如<code>javac</code>命令就没有，删除后重新安装。</p>
+<p>系统自带的jdk功能少，例如<code>javac</code>命令就没有，删除后重新安装。<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JavaSDK地址</a>。</p>
 
 <pre><code>### 删除JDK
 rpm -qa | grep jdk
@@ -126,9 +130,9 @@ vim ~/.bash_profile
 
 JAVA_HOME=/usr/local/jdk1.8.0_161
 export JAVA_HOME
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib
 export PATH=$JAVA_HOME/bin:$PATH
-CLASSPATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib
-export PATH=$CLASSPATH:$JAVA_HOME/jre/bin
 
 source ~/.bash_profile 
 
@@ -138,7 +142,7 @@ java -version
 
 <h5 id="2-gradle安装">2.Gradle安装</h5>
 
-<p>Gradle和AndroidSDK都说用自己电脑的，就不用下载啦，直接拷贝使用。注意拷贝项目使用的Gradle版本。又拷贝了一次和下面的截图不一致。</p>
+<p>Gradle和AndroidSDK都说用自己电脑的，就不用下载啦，直接拷贝使用。注意拷贝项目使用的Gradle版本。又拷贝了一次和下面的截图不一致。<a href="https://gradle.org/releases/">Gradle各个版本地址</a>。</p>
 
 <pre><code>## copy file
 scp gradle-4.1-all.zip root@192.168.0.106:/home
@@ -155,13 +159,17 @@ export PATH=$GRADLE_HOME/bin:$PATH
 
 source ~/.bash_profile 
 
+## 禁用daemon进程
+vim ~/.gradle/gradle.properties ##添加文件
+org.gradle.daemon=false  ##添加内容
+
 ## test
 gradle -v
 </code></pre>
 
 <h4 id="3-androidsdk配置">3.AndroidSDK配置</h4>
 
-<p>到官网下载Linux版本的SDK。</p>
+<p>到官网下载<a href="https://developer.android.com/studio/#downloads">Linux版本的SDK</a>。</p>
 
 <pre><code>###Linux版本SDK下载
 wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
@@ -216,6 +224,11 @@ scp /Users/hello/Downloads/apache-tomcat-8.5.30.tar.gz  root@192.168.0.106:/home
 wget http://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz
 </code></pre>
 
+<pre><code>### 端口更改为80
+vim /usr/local/tomcat/conf/server.xml
+将Connector port=&quot;8080&quot;改为&quot;80&quot;即可。
+</code></pre>
+
 <pre><code>###启动
 sudo ./startup.sh
 ###关闭　
@@ -227,6 +240,9 @@ vim /etc/rc.d/rc.local
 
 export JAVA_HOME=/usr/local/jdk1.8.0_161　###必须加
 /usr/local/tomcat/bin/startup.sh start
+
+### 添加运行权限
+chmod +x /etc/rc.d/rc.local
 </code></pre>
 
 <h4 id="2-jenkins-https-jenkins-io-download-到官网下载安装包-这里选择-generate-java-package-war-进行安装">2. <a href="https://jenkins.io/download/">Jenkins</a>,到官网下载安装包，这里选择<code>Generate Java package(.war)</code>进行安装。</h4>
@@ -237,7 +253,7 @@ export JAVA_HOME=/usr/local/jdk1.8.0_161　###必须加
 mv jenkins.war  /usr/local/tomcat/webapps/
 </code></pre>
 
-<p>启动Tomcat服务器，访问<code>http://localhost:8080</code>进行安装配置。</p>
+<p>启动Tomcat服务器，访问<code>http://localhost/jenkins</code>进行安装配置。</p>
 
 <h6 id="1-输入密码">1. 输入密码</h6>
 
@@ -381,7 +397,7 @@ mv jenkins.war  /usr/local/tomcat/webapps/
 
 <p></p>
 
-<p>在这里使用第三方插件(Env Injector)进行动态注入变量：读取本地的Properties文件，将变量注入到系统变量中，可在后面直接使用</p>
+<p>在这里使用第三方插件(Environment Injector)进行动态注入变量：读取本地的Properties文件，将变量注入到系统变量中，可在后面直接使用</p>
 
 
 <figure >
